@@ -50,7 +50,12 @@ options:
      default: 'yes'
    tenant_name:
      description:
-        - The name of the tenant for whom the network is created
+        - The name of the tenant for whom the network is created. Mutually exclusive with tenant_id
+     required: false
+     default: None
+   tenant_id:
+     description:
+        - The id of the tenant for whom the network is created. Mutually exclusive with tenant_name
      required: false
      default: None
    auth_url:
@@ -234,6 +239,7 @@ def main():
     argument_spec.update(dict(
             name                            = dict(required=True),
             tenant_name                     = dict(default=None),
+            tenant_id                       = dict(default=None),
             provider_network_type           = dict(default=None, choices=['local', 'vlan', 'flat', 'gre']),
             provider_physical_network       = dict(default=None),
             provider_segmentation_id        = dict(default=None),
@@ -254,7 +260,10 @@ def main():
 
     neutron = _get_neutron_client(module, module.params)
 
-    _set_tenant_id(module)
+    if module.params['tenant_id']:
+        _os_tenant_id = module.params['tenant_id']
+    else:
+        _set_tenant_id(module)
 
     if module.params['state'] == 'present':
         network_id = _get_net_id(neutron, module)
