@@ -77,6 +77,11 @@ options:
         - Name of the tenant whose subnet has to be attached.
      required: false
      default: None
+   tenant_name:
+     description:
+        - ID of the tenant whose subnet has to be attached.
+     required: false
+     default: None
 requirements: ["quantumclient", "keystoneclient"]
 '''
 
@@ -213,12 +218,17 @@ def main():
             router_name                     = dict(required=True),
             subnet_name                     = dict(required=True),
             tenant_name                     = dict(default=None),
+            tenant_id                       = dict(default=None),
             state                           = dict(default='present', choices=['absent', 'present']),
     ))
     module = AnsibleModule(argument_spec=argument_spec)
 
     neutron = _get_neutron_client(module, module.params)
-    _set_tenant_id(module)
+    if module.params['tenant_id']:
+        global _os_tenant_id
+        _os_tenant_id = module.params['tenant_id']
+    else:
+        _set_tenant_id(module)
 
     router_id = _get_router_id(module, neutron)
     if not router_id:
@@ -246,4 +256,3 @@ def main():
 from ansible.module_utils.basic import *
 from ansible.module_utils.openstack import *
 main()
-

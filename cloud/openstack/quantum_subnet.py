@@ -83,6 +83,11 @@ options:
         - The name of the tenant for whom the subnet should be created
      required: false
      default: None
+   tenant_id:
+     description:
+        - The id of the tenant for whom the subnet should be created
+     required: false
+     default: None
    ip_version:
      description:
         - The IP version of the subnet 4 or 6
@@ -258,6 +263,7 @@ def main():
             network_name            = dict(required=True),
             cidr                    = dict(required=True),
             tenant_name             = dict(default=None),
+            tenant_id               = dict(default=None),
             state                   = dict(default='present', choices=['absent', 'present']),
             ip_version              = dict(default='4', choices=['4', '6']),
             enable_dhcp             = dict(default='true', type='bool'),
@@ -268,7 +274,11 @@ def main():
     ))
     module = AnsibleModule(argument_spec=argument_spec)
     neutron = _get_neutron_client(module, module.params)
-    _set_tenant_id(module)
+    if module.params['tenant_id']:
+        global _os_tenant_id
+        _os_tenant_id = module.params['tenant_id']
+    else:
+        _set_tenant_id(module)
     if module.params['state'] == 'present':
         subnet_id = _get_subnet_id(module, neutron)
         if not subnet_id:
@@ -288,4 +298,3 @@ def main():
 from ansible.module_utils.basic import *
 from ansible.module_utils.openstack import *
 main()
-

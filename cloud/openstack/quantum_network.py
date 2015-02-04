@@ -203,6 +203,12 @@ def _create_network(module, neutron):
         'shared':                    module.params.get('shared'),
         'admin_state_up':            module.params.get('admin_state_up'),
     }
+    if _os_tenant_id == _os_keystone.tenant_id:
+        network.pop('tenant_id', None)
+
+    if not module.params['router_external']:
+        # router:external requires admin rights if specified. Remove if default.
+        network.pop('router:external', None)
 
     if module.params['provider_network_type'] == 'local':
         network.pop('provider:physical_network', None)
@@ -261,6 +267,7 @@ def main():
     neutron = _get_neutron_client(module, module.params)
 
     if module.params['tenant_id']:
+        global _os_tenant_id
         _os_tenant_id = module.params['tenant_id']
     else:
         _set_tenant_id(module)
@@ -285,4 +292,3 @@ def main():
 from ansible.module_utils.basic import *
 from ansible.module_utils.openstack import *
 main()
-

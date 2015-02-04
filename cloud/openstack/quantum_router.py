@@ -179,13 +179,18 @@ def main():
     argument_spec.update(dict(
         name                            = dict(required=True),
         tenant_name                     = dict(default=None),
+        tenant_id                     = dict(default=None),
         state                           = dict(default='present', choices=['absent', 'present']),
         admin_state_up                  = dict(type='bool', default=True),
     ))
     module = AnsibleModule(argument_spec=argument_spec)
 
     neutron = _get_neutron_client(module, module.params)
-    _set_tenant_id(module)
+    if module.params['tenant_id']:
+        global _os_tenant_id
+        _os_tenant_id = module.params['tenant_id']
+    else:
+        _set_tenant_id(module)
 
     if module.params['state'] == 'present':
         router_id = _get_router_id(module, neutron)
@@ -207,4 +212,3 @@ def main():
 from ansible.module_utils.basic import *
 from ansible.module_utils.openstack import *
 main()
-
