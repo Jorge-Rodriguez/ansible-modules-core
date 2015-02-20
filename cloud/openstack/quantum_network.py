@@ -58,6 +58,7 @@ options:
         - The id of the tenant for whom the network is created. Mutually exclusive with tenant_name
      required: false
      default: None
+     version_added: "1.9"
    auth_url:
      description:
         - The keystone url for authentication

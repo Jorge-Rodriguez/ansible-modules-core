@@ -88,6 +88,7 @@ options:
         - The id of the tenant for whom the subnet should be created
      required: false
      default: None
+     version_added: "1.9"
    ip_version:
      description:
         - The IP version of the subnet 4 or 6

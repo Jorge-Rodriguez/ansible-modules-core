@@ -77,11 +77,12 @@ options:
         - Name of the tenant whose subnet has to be attached.
      required: false
      default: None
-   tenant_name:
+   tenant_id:
      description:
         - ID of the tenant whose subnet has to be attached.
      required: false
      default: None
+     version_added: "1.9"
 requirements: ["quantumclient", "keystoneclient"]
 '''
 

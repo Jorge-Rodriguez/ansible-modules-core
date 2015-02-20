@@ -73,6 +73,12 @@ options:
         - Name of the tenant for which the router has to be created, if none router would be created for the login tenant.
      required: false
      default: None
+   tenant_id:
+     description:
+        - The id of the tenant for which the router has to be created, if none router would be created for the login tenant.
+     required: false
+     default: None
+     version_added: "1.9"
    admin_state_up:
      description:
         - desired admin state of the created router .
