@@ -127,7 +127,7 @@ options:
       - exposed
   force_kill:
     description:
-      - Use the kill command when stopping a running container. 
+      - Use the kill command when stopping a running container.
     default: false
     required: false
   groups:
@@ -369,7 +369,7 @@ options:
         re-create a matching container, even if it is running. Use restart to force a matching container to be stopped and
         restarted. Use force_kill to kill a container rather than stopping it. Use keep_volumes to retain volumes associated
         with a removed container.'
-      - 'I(stopped) - Asserts that the container is first I(present), and then if the container is running moves it to a stopped 
+      - 'I(stopped) - Asserts that the container is first I(present), and then if the container is running moves it to a stopped
         state. Use force_kill to kill a container rather than stopping it.'
     required: false
     default: started
@@ -493,7 +493,7 @@ EXAMPLES = '''
     name: mycontainer
     state: present
     image: ubuntu:14.04
-    command: sleep infinity 
+    command: sleep infinity
 
 - name: Stop a contianer
   docker_container:
@@ -802,7 +802,6 @@ class TaskParameters(DockerBaseClass):
             tty='tty',
             ports='ports',
             environment='env',
-            dns='dns_servers',
             name='name',
             entrypoint='entrypoint',
             cpu_shares='cpu_shares',
